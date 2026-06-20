@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonToolbar, IonBackButton, IonButtons, IonSearchbar } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-search',
   templateUrl: './search.page.html',
   styleUrls: ['./search.page.scss'],
   standalone: true,
-  imports: [IonButtons, IonBackButton, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [IonSearchbar, IonButtons, IonBackButton, IonContent, IonHeader, IonToolbar, CommonModule, FormsModule]
 })
 export class SearchPage implements OnInit {
 
