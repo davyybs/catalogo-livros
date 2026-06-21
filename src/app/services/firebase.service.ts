@@ -1,15 +1,13 @@
-import { Injectable } from '@angular/core';
-import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, addDoc, collectionData, doc, updateDoc, deleteDoc } from '@angular/fire/firestore';
-import { environment } from './../../environments/environment';
+import { Injectable, inject } from '@angular/core';
+import { Firestore, collection, addDoc, collectionData, doc, updateDoc, deleteDoc } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FirebaseService {
-  private app = initializeApp(environment.firebaseConfig);
-  private db = getFirestore(this.app);
+  private db = inject(Firestore);
+
   private livrosCollection = collection(this.db, 'meus_livros');
 
   adicionarLivro(livro: any) {
