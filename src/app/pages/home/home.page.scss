@@ -17,3 +17,21 @@ ion-content div {
 h2 {
   font-weight: bold;
 }
+
+ion-card {
+  display: flex;
+  padding-left: 16px;
+
+  ion-img {
+    width: 20%;
+  }
+
+  div {
+    align-items: start;
+    flex-direction: column;
+
+    ion-card-content {
+      padding: 0 0 16px 16px;
+    }
+  }
+}
