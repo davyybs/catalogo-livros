@@ -14,7 +14,7 @@ export class GoogleBooksService {
   private db = inject(Firestore);
 
   getBooks(query: string): Observable<any[]> {
-    return this.http.get<any>(`${this.apiUrl}?q=${encodeURIComponent(query)}&langRestrict=pt&key=${this.apiKey}`).pipe(
+    return this.http.get<any>(`${this.apiUrl}?q=${encodeURIComponent(query)}&langRestrict=pt&maxResults=40&key=${this.apiKey}`).pipe(
       map(response => response.items || [])
     );
   }
