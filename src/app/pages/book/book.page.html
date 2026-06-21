@@ -15,8 +15,15 @@
       <img [src]="book.capa" alt="Capa do livro" style="width: 80px; border-radius: 4px;" />
       <div>
         <h2>{{ book.titulo }}</h2>
-        <p>{{ book.autor }}</p>
+        <div class="bookExtraInfo">
+          <ion-label>{{ book.autor }}</ion-label>
+          <ion-label>{{ book.categorias }}</ion-label>
+        </div>
       </div>
+    </div>
+
+    <div>
+      <p>{{ book.descricao }}</p>
     </div>
 
     <div class="ion-margin-top">

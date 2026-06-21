@@ -11,6 +11,23 @@ ion-toolbar div {
   display: flex;
 
   div {
+    display: flex;
+    flex-direction: column;
     padding-left: 16px;
+
+    h2 {
+      font-weight: bold;
+    }
+
+    .bookExtraInfo {
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+
+      ion-label {
+        margin-bottom: 5px;
+      }
+    }
   }
+
 }
