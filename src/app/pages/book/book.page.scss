@@ -1,0 +1,16 @@
+ion-toolbar div {
+  display: flex;
+  justify-content: space-between;
+
+  ion-button {
+    margin-right: 10px;
+  }
+}
+
+.booksInfo {
+  display: flex;
+
+  div {
+    padding-left: 16px;
+  }
+}

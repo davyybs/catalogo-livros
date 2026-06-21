@@ -1,13 +1,48 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>book</ion-title>
+<ion-header>
+  <ion-toolbar color="primary">
+    <div>
+      <ion-back-button color="secondary"></ion-back-button>
+      <ion-button fill="clear" routerLink="/search" routerDirection="forward">
+        <ion-icon name="search" slot="icon-only" color="secondary"></ion-icon>
+      </ion-button>
+    </div>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">book</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content color="background" class="ion-padding">
+  @if (book) {
+    <div class="booksInfo">
+      <img [src]="book.capa" alt="Capa do livro" style="width: 80px; border-radius: 4px;" />
+      <div>
+        <h2>{{ book.titulo }}</h2>
+        <p>{{ book.autor }}</p>
+      </div>
+    </div>
+
+    <div class="ion-margin-top">
+      <ion-item lines="full" color="card-background">
+        <ion-label position="stacked">Status de Leitura</ion-label>
+        <ion-select [(ngModel)]="book.status" placeholder="Selecione o status">
+          <ion-select-option value="Quero Ler">Quero Ler</ion-select-option>
+          <ion-select-option value="Lendo">Lendo</ion-select-option>
+          <ion-select-option value="Lido">Lido</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item lines="full" class="ion-margin-top" color="card-background">
+        <ion-label position="stacked">Páginas Lidas</ion-label>
+        <ion-input type="number" [(ngModel)]="book.paginasLidas" min="0"></ion-input>
+      </ion-item>
+    </div>
+
+    <div class="ion-margin-top ion-display-flex ion-justify-content-end">
+      <ion-button color="success" (click)="saveChanges()">
+        <ion-icon name="save"></ion-icon>
+      </ion-button>
+
+      <ion-button color="danger" (click)="confirmarExclusao()">
+        <ion-icon name="trash"></ion-icon>
+      </ion-button>
+    </div>
+  }
 </ion-content>
