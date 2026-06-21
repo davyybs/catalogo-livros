@@ -1,11 +1,13 @@
 import { Component, OnInit, inject } from '@angular/core';
 import {
   IonContent, IonHeader, IonToolbar, IonBackButton, IonButtons,
-  IonSearchbar, IonList, IonItem, IonLabel, IonButton, IonIcon, IonThumbnail
+  IonSearchbar, IonList, IonItem, IonLabel, IonButton, IonIcon, IonThumbnail,
+  ToastController
 } from '@ionic/angular/standalone';
 import { GoogleBooksService } from 'src/app/services/google-books.service';
-import { addIcons } from 'ionicons'; // Importação necessária para registrar ícones
-import { addCircleOutline } from 'ionicons/icons'; // Ícone usado no HTML
+import { FirebaseService } from 'src/app/services/firebase.service';
+import { addIcons } from 'ionicons';
+import { addCircleOutline, bookOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-search',
@@ -17,15 +19,16 @@ import { addCircleOutline } from 'ionicons/icons'; // Ícone usado no HTML
     IonButtons, IonBackButton, IonContent, IonHeader, IonToolbar, IonThumbnail
   ]
 })
-export class SearchPage implements OnInit {
+export class SearchPage {
   private googleBooksService = inject(GoogleBooksService);
+  private firebaseService = inject(FirebaseService);
+  private toastController = inject(ToastController);
 
   books: any[] = [];
   carregando: boolean = false;
 
   constructor() {
-    // Registra os ícones do Ionic Standalone
-    addIcons({ addCircleOutline });
+    addIcons({ addCircleOutline, bookOutline });
   }
 
   onSearch(event: any) {
@@ -49,6 +52,32 @@ export class SearchPage implements OnInit {
     });
   }
 
-  ngOnInit() {
+  async addOnList(bookAPI: any) {
+    const info = bookAPI.volumeInfo;
+
+    const newBook = {
+      titulo: info.title,
+      autor: info.authors ? info.authors[0] : 'Autor Desconhecido',
+      capa: info.imageLinks?.thumbnail || 'https://via.placeholder.com/128x192?text=Sem+Capa',
+      status: 'Quero Ler',
+      paginasLidas: 0
+    };
+
+    try {
+      await this.firebaseService.adicionarLivro(newBook);
+      this.showToast(`${newBook.titulo} adicionado à Estante!`);
+    } catch (erro) {
+      console.error('Erro ao salvar no Firebase:', erro);
+    }
+  }
+
+  async showToast(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000,
+      position: 'bottom',
+      color: 'success'
+    });
+    await toast.present();
   }
 }
