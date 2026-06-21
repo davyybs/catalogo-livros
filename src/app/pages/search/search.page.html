@@ -1,15 +1,52 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button color="secondary"></ion-back-button>
+      <ion-back-button color="secondary" defaultHref="/estante"></ion-back-button>
     </ion-buttons>
 
-    <ion-searchbar color="primary"></ion-searchbar>
+    <ion-searchbar
+      color="primary"
+      placeholder="Pesquisar livros..."
+      debounce="500"
+      (ionChange)="onSearch($event)"
+      >
+    </ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
-<ion-content color="background">
-  <div>
+<ion-content class="ion-padding" color="background">
+  @if (books.length === 0 && !carregando) {
+    <div class="ion-text-center ion-padding" style="margin-top: 20%;">
+      <h2 style="color: var(--ion-color-medium);">Pesquise por um livro!</h2>
+    </div>
+  }
 
-  </div>
+  @if (carregando) {
+    <div class="ion-text-center ion-padding">
+      <p>A procurar livros...</p>
+    </div>
+  }
+
+  @if (books.length > 0 && !carregando) {
+    <ion-list>
+      @for (item of books; track item.id) {
+        <ion-item class="ion-margin-bottom" lines="none" style="--background: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+
+          <ion-thumbnail slot="start" style="--border-radius: 4px; width: 50px; height: 75px;">
+            <img [src]="item.volumeInfo.imageLinks?.thumbnail || 'https://via.placeholder.com/128x192?text=Sem+Capa'" alt="Capa" />
+          </ion-thumbnail>
+
+          <ion-label>
+            <h2 style="font-weight: bold; white-space: normal;">{{ item.volumeInfo.title }}</h2>
+            <p style="color: gray; margin-top: 4px;">{{ item.volumeInfo.authors ? item.volumeInfo.authors[0] : 'Autor Desconhecido' }}</p>
+          </ion-label>
+
+          <ion-button slot="end" fill="clear" color="secondary">
+            <ion-icon slot="icon-only" name="add-circle-outline" style="font-size: 28px;"></ion-icon>
+          </ion-button>
+
+        </ion-item>
+      }
+    </ion-list>
+  }
 </ion-content>

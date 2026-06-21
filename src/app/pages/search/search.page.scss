@@ -1,3 +1,14 @@
 ion-searchbar {
   --box-shadow: none;
 }
+
+ion-content div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+h2 {
+  color: var(--ion-color-medium);
+}
