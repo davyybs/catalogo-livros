@@ -60,7 +60,12 @@ export class SearchPage implements OnInit, OnDestroy {
     this.carregando = true;
     this.googleBooksService.getBooks(query).subscribe({
       next: (result) => {
-        this.books = result;
+        this.books = (result || []).map((book: any) => {
+          if (book.volumeInfo?.imageLinks?.thumbnail) {
+            book.volumeInfo.imageLinks.thumbnail = book.volumeInfo.imageLinks.thumbnail.replace('http://', 'https://');
+          }
+          return book;
+        });
         this.carregando = false;
       },
       error: (err) => {
@@ -73,15 +78,17 @@ export class SearchPage implements OnInit, OnDestroy {
   async addOnList(bookAPI: any) {
     const info = bookAPI.volumeInfo;
 
+    const capaTratada = info?.imageLinks?.thumbnail || 'https://via.placeholder.com/128x192?text=Sem+Capa';
+
     const newBook = {
-      titulo: info.title,
+      titulo: info.title || 'Título Desconhecido',
       autor: info.authors ? info.authors[0] : 'Autor Desconhecido',
-      capa: info.imageLinks?.thumbnail || 'https://via.placeholder.com/128x192?text=Sem+Capa',
-      descricao: info.description,
-      categorias: info.categories,
+      capa: capaTratada,
+      descricao: info.description || 'Sem descrição disponível.',
+      categorias: info.categories || [],
       status: 'Quero Ler',
       paginasLidas: 0,
-      paginasTotais: info.pageCount,
+      paginasTotais: info.pageCount || 0,
     };
 
     try {
@@ -89,6 +96,7 @@ export class SearchPage implements OnInit, OnDestroy {
       this.showToast(`${newBook.titulo} adicionado à Estante!`);
     } catch (erro) {
       console.error('Erro ao salvar no Firebase:', erro);
+      this.showToast('Erro ao tentar salvar o livro.');
     }
   }
 

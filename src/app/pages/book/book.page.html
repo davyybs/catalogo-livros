@@ -12,7 +12,7 @@
 <ion-content color="background" class="ion-padding">
   @if (book) {
     <div class="booksInfo">
-      <img [src]="book.capa" alt="Capa do livro" style="width: 80px; border-radius: 4px;" />
+      <img [src]="book.capa?.replace('http://', 'https://')" alt="Capa do livro" style="width: 80px; border-radius: 4px;" />
       <div>
         <h2>{{ book.titulo }}</h2>
         <div class="bookExtraInfo">
@@ -22,8 +22,13 @@
       </div>
     </div>
 
-    <div>
-      <p>{{ book.descricao }}</p>
+    <div class="description">
+      <p>
+        {{ mostrarTextoCompleto ? book.descricao : (book.descricao | slice:0:800) + '...' }}
+      </p>
+      <ion-button fill="clear" size="small" (click)="mostrarTextoCompleto = !mostrarTextoCompleto">
+        {{ mostrarTextoCompleto ? 'Ver menos' : 'Ver mais' }}
+      </ion-button>
     </div>
 
     <div class="ion-margin-top">

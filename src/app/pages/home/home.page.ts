@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { IonContent, IonHeader, IonToolbar, IonButton, IonIcon, IonItem, IonCard, IonCardTitle, IonCardHeader, IonCardSubtitle, IonCardContent, IonImg } from '@ionic/angular/standalone';
 import { RouterLink } from '@angular/router';
 import { FirebaseService } from 'src/app/services/firebase.service';
+import { Subscription } from 'rxjs';
 import { addIcons } from 'ionicons';
 import { search, book, ellipsisHorizontal } from 'ionicons/icons';
 
@@ -14,6 +15,7 @@ import { search, book, ellipsisHorizontal } from 'ionicons/icons';
 })
 export class HomePage implements OnInit {
   private firebaseService = inject(FirebaseService);
+  private bookshelfSubscription!: Subscription;
 
   books: any[] = [];
 
@@ -25,15 +27,26 @@ export class HomePage implements OnInit {
     this.loadBookshelf();
   }
 
-  loadBookshelf() {
-    this.firebaseService.obterEstante().subscribe({
-      next: (firebaseData) => {
-        this.books = firebaseData;
-      },
-      error: (err) => {
-        console.error("Erro ao buscar estante", err)
-      }
-    })
+  async loadBookshelf() {
+    try {
+      await this.firebaseService.loginAnonimo();
+
+      this.bookshelfSubscription = this.firebaseService.obterEstante().subscribe({
+        next: (livros) => {
+          this.books = livros;
+          console.log('Livros deste dispositivo carregados:', this.books);
+        },
+        error: (err) => console.error('Erro ao buscar estante:', err)
+      });
+    } catch (error) {
+      console.error('Erro na autenticação silenciosa da Home:', error);
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.bookshelfSubscription) {
+      this.bookshelfSubscription.unsubscribe();
+    }
   }
 
 }

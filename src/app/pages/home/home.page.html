@@ -14,7 +14,7 @@
 <ion-content color="background">
   @for (book of books; track book.id) {
     <ion-card color="card-background">
-      <ion-img [src]="book.capa" [alt]="book.titulo"></ion-img>
+      <ion-img [src]="book.capa?.replace('http://', 'https://')" [alt]="book.titulo"></ion-img>
 
       <div>
         <ion-card-header>

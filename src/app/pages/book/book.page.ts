@@ -1,5 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { SlicePipe } from '@angular/common';
 import { IonContent, IonHeader, IonToolbar, IonItem, IonIcon, IonButton, AlertController, IonInput, IonLabel, IonSelect, IonSelectOption, IonBackButton } from '@ionic/angular/standalone';
 import { RouterLink, Router, ActivatedRoute } from '@angular/router';
 import { GoogleBooksService } from 'src/app/services/google-books.service';
@@ -12,7 +13,7 @@ import { book,search, trash, save } from 'ionicons/icons';
   templateUrl: './book.page.html',
   styleUrls: ['./book.page.scss'],
   standalone: true,
-  imports: [IonBackButton, IonSelect, IonSelectOption, IonLabel, IonInput, IonContent, IonButton, IonIcon, IonItem, IonHeader, IonToolbar, RouterLink, FormsModule]
+  imports: [IonBackButton, IonSelect, IonSelectOption, IonLabel, IonInput, IonContent, IonButton, IonIcon, IonItem, IonHeader, IonToolbar, RouterLink, FormsModule, SlicePipe]
 })
 export class BookPage implements OnInit {
   private route = inject(ActivatedRoute);
@@ -23,6 +24,7 @@ export class BookPage implements OnInit {
 
   bookId: string = '';
   book: any = null;
+  mostrarTextoCompleto: boolean = false;
 
   constructor() {
     addIcons({search,save,trash,book});

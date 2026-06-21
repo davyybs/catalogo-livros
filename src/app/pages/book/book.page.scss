@@ -31,3 +31,17 @@ ion-toolbar div {
   }
 
 }
+
+.description {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+
+  p {
+    margin-bottom: 0;
+  }
+
+  ion-button {
+    margin: 0;
+  }
+}
