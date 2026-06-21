@@ -3,7 +3,7 @@ import { IonContent, IonHeader, IonToolbar, IonButton, IonIcon, IonItem, IonCard
 import { RouterLink } from '@angular/router';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { addIcons } from 'ionicons';
-import { search, book } from 'ionicons/icons';
+import { search, book, ellipsisHorizontal } from 'ionicons/icons';
 
 @Component({
   selector: 'app-home',
@@ -18,7 +18,7 @@ export class HomePage implements OnInit {
   books: any[] = [];
 
   constructor() {
-    addIcons({book,search});
+    addIcons({book,search,ellipsisHorizontal});
   }
 
   ngOnInit() {

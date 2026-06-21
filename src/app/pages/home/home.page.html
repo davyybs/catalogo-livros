@@ -22,8 +22,13 @@
           <ion-card-subtitle>{{ book.autor }}</ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
-          <p><strong>Páginas lidas:</strong> {{ book.paginasLidas || 0 }} / {{ book.totalPaginas || '?' }}</p>
-          <p><strong>Status:</strong> {{ book.status || 'Não iniciado' }}</p>
+          <div>
+            <p><strong>Páginas lidas:</strong> {{ book.paginasLidas || 0 }} / {{ book.totalPaginas || '?' }}</p>
+            <p><strong>Status:</strong> {{ book.status || 'Não iniciado' }}</p>
+          </div>
+          <ion-button shape="round" fill="clear" [routerLink]="['/book', book.id]">
+            <ion-icon name="ellipsis-horizontal" slot="icon-only" color="secondary"></ion-icon>
+          </ion-button>
         </ion-card-content>
       </div>
     </ion-card>
