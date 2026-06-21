@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import {
   IonContent, IonHeader, IonToolbar, IonBackButton, IonButtons,
   IonSearchbar, IonList, IonItem, IonLabel, IonButton, IonIcon, IonThumbnail,
@@ -8,6 +8,8 @@ import { GoogleBooksService } from 'src/app/services/google-books.service';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { addIcons } from 'ionicons';
 import { addCircleOutline, bookOutline } from 'ionicons/icons';
+import { Subject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-search',
@@ -19,16 +21,28 @@ import { addCircleOutline, bookOutline } from 'ionicons/icons';
     IonButtons, IonBackButton, IonContent, IonHeader, IonToolbar, IonThumbnail
   ]
 })
-export class SearchPage {
+export class SearchPage implements OnInit, OnDestroy {
   private googleBooksService = inject(GoogleBooksService);
   private firebaseService = inject(FirebaseService);
   private toastController = inject(ToastController);
+
+  private searchSubject = new Subject<string>();
+  private searchSubscription!: Subscription;
 
   books: any[] = [];
   carregando: boolean = false;
 
   constructor() {
     addIcons({ addCircleOutline, bookOutline });
+  }
+
+  ngOnInit() {
+    this.searchSubscription = this.searchSubject.pipe(
+      debounceTime(500),
+      distinctUntilChanged()
+    ).subscribe((query) => {
+      this.executarBusca(query);
+    });
   }
 
   onSearch(event: any) {
@@ -39,6 +53,10 @@ export class SearchPage {
       return;
     }
 
+    this.searchSubject.next(query);
+  }
+
+  executarBusca(query: string) {
     this.carregando = true;
     this.googleBooksService.getBooks(query).subscribe({
       next: (result) => {
@@ -59,8 +77,11 @@ export class SearchPage {
       titulo: info.title,
       autor: info.authors ? info.authors[0] : 'Autor Desconhecido',
       capa: info.imageLinks?.thumbnail || 'https://via.placeholder.com/128x192?text=Sem+Capa',
+      descricao: info.description,
+      categorias: info.categories,
       status: 'Quero Ler',
-      paginasLidas: 0
+      paginasLidas: 0,
+      paginasTotais: info.pageCount,
     };
 
     try {
@@ -79,5 +100,11 @@ export class SearchPage {
       color: 'success'
     });
     await toast.present();
+  }
+
+  ngOnDestroy() {
+    if (this.searchSubscription) {
+      this.searchSubscription.unsubscribe();
+    }
   }
 }
