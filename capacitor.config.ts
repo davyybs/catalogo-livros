@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'formadora-4',
+  appId: 'dev.bookshelf.com',
+  appName: 'Bookshelf',
   webDir: 'www'
 };
 
