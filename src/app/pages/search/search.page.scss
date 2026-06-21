@@ -12,3 +12,21 @@ ion-content div {
 h2 {
   color: var(--ion-color-medium);
 }
+
+ion-list {
+  background: var(--ion-color-background);
+
+  ion-item {
+    --border-radius: 6px;
+  }
+
+  ion-label h2 {
+    color: black;
+  }
+
+  ion-thumbnail {
+    --border-radius: 4px;
+    width: 50px;
+    height: 75px;
+  }
+}
